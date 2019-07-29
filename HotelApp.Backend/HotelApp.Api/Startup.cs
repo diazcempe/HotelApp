@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HotelApp.Api.AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -18,9 +19,9 @@ namespace HotelApp.Api
 {
     /// <summary>
     /// References:
-    /// Simple Injector
-    /// https://simpleinjector.readthedocs.io/en/latest/aspnetintegration.html
-    /// </summary>
+    /// Simple Injector: https://simpleinjector.readthedocs.io/en/latest/aspnetintegration.html
+    /// Auto Mapper: http://docs.automapper.org/en/stable/Dependency-injection.html#simple-injector
+    /// </summary> 
     public class Startup
     {
         private Container _container = new Container();
@@ -35,7 +36,16 @@ namespace HotelApp.Api
         #region SimpleInjector
         private void InitializeContainer()
         {
+            #region AutoMapper
+            ConfigureAutoMapper();
+            #endregion
+        }
+        #endregion
 
+        #region AutoMapper
+        private void ConfigureAutoMapper()
+        {
+            _container.RegisterSingleton(() => _container.GetInstance<MapperProvider>().GetMapper());
         }
         #endregion
 
@@ -93,7 +103,5 @@ namespace HotelApp.Api
 
             app.UseMvc();
         }
-
-
     }
 }
