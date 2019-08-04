@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HotelApp.Api.AutoMapper;
+using HotelApp.Core.Data;
+using HotelApp.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,6 +38,8 @@ namespace HotelApp.Api
         #region SimpleInjector
         private void InitializeContainer()
         {
+            _container.Register(typeof(IReservationRepository), typeof(ReservationRepository), Lifestyle.Scoped);
+
             #region AutoMapper
             ConfigureAutoMapper();
             #endregion
