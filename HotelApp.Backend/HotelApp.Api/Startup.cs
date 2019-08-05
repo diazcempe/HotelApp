@@ -23,6 +23,7 @@ namespace HotelApp.Api
     /// References:
     /// Simple Injector: https://simpleinjector.readthedocs.io/en/latest/aspnetintegration.html
     /// Auto Mapper: http://docs.automapper.org/en/stable/Dependency-injection.html#simple-injector
+    /// GraphQL: https://medium.com/volosoft/building-graphql-apis-with-asp-net-core-419b32a5305b
     /// </summary> 
     public class Startup
     {
