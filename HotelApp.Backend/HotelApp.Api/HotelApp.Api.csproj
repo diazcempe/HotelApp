@@ -9,11 +9,13 @@
     <PackageReference Include="AutoMapper" Version="8.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc" Version="4.6.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\HotelApp.Core\HotelApp.Core.csproj" />
+    <ProjectReference Include="..\HotelApp.Data\HotelApp.Data.csproj" />
   </ItemGroup>
 
 </Project>
