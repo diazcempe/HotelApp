@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using HotelApp.Core.Data;
 using HotelApp.Core.Models;
 using HotelApp.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace HotelApp.Data.Repositories
 {
@@ -37,5 +39,19 @@ namespace HotelApp.Data.Repositories
                 .Include(x => x.Guest)
                 .ToListAsync();
         }
+
+        public IIncludableQueryable<Reservation, Guest> GetQuery()
+        {
+            return _hotelAppDbContext
+                .Reservations
+                .Include(x => x.Room)
+                .Include(x => x.Guest);
+        }
+
+        public Reservation Get(int id)
+        {
+            return GetQuery().Single(x => x.Id == id);
+        }
+
     }
 }
