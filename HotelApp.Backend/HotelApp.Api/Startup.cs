@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HotelApp.Api.AutoMapper;
+using HotelApp.Api.Constants;
 using HotelApp.Core.Data;
+using HotelApp.Data.Contexts;
 using HotelApp.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -39,6 +42,15 @@ namespace HotelApp.Api
         #region SimpleInjector
         private void InitializeContainer()
         {
+            // Register DbContext
+            _container.Register<DbContext>(() => {
+                var dbOptionBuilder = new DbContextOptionsBuilder<HotelAppDbContext>()
+                    .UseSqlServer(Configuration.GetConnectionString(AppConstants.SqlServerConnectionStringName));
+
+                var dbOptions = dbOptionBuilder.Options;
+                return new HotelAppDbContext(dbOptions);
+            }, Lifestyle.Scoped);
+
             _container.Register(typeof(IReservationRepository), typeof(ReservationRepository), Lifestyle.Scoped);
 
             #region AutoMapper
