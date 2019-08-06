@@ -13,6 +13,29 @@ namespace HotelApp.Api.GraphQL
 {
     public class HotelAppQuery : ObjectGraphType
     {
+        /*
+         -- Simple test query --
+            query TestQuery {
+              reservations {
+                id
+                checkinDate
+                checkoutDate
+                guest {
+                  id
+                  name
+                  registerDate
+                }
+                room {
+                  id
+                  name
+                  number
+                  allowedSmoking
+                  status
+                }
+              }
+            }
+        */
+
         public HotelAppQuery(IReservationRepository reservationRepository)
         {
             Field<ListGraphType<ReservationType>>(
