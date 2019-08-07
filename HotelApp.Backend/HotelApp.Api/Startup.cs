@@ -47,13 +47,9 @@ namespace HotelApp.Api
         private void InitializeContainer()
         {
             // Register DbContext
-            _container.Register<DbContext>(() => {
-                var dbOptionBuilder = new DbContextOptionsBuilder<HotelAppDbContext>()
-                    .UseSqlServer(Configuration.GetConnectionString(AppConstants.SqlServerConnectionStringName));
-
-                var dbOptions = dbOptionBuilder.Options;
-                return new HotelAppDbContext(dbOptions);
-            }, Lifestyle.Scoped);
+            var dbOptionBuilder = new DbContextOptionsBuilder<HotelAppDbContext>()
+                .UseSqlServer(Configuration.GetConnectionString(AppConstants.SqlServerConnectionStringName));
+            _container.Register(() => new HotelAppDbContext(dbOptionBuilder.Options), Lifestyle.Scoped);
 
             _container.Register(typeof(IReservationRepository), typeof(ReservationRepository), Lifestyle.Scoped);
 
