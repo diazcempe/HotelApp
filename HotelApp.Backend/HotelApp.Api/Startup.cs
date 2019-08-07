@@ -94,10 +94,12 @@ namespace HotelApp.Api
             services.AddScoped<HotelAppSchema>();
 
             services.AddGraphQL(s =>
-            {
-                s.ExposeExceptions = true; //set true only in development mode. make it switchable.
-            })
-            .AddGraphTypes(ServiceLifetime.Scoped);
+                {
+                    s.ExposeExceptions = true; //set true only in development mode. make it switchable.
+                })
+                .AddGraphTypes(ServiceLifetime.Scoped)
+                .AddUserContextBuilder(httpContext => httpContext.User)
+                .AddDataLoader();
             #endregion
         }
 
