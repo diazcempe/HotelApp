@@ -23,21 +23,12 @@ namespace HotelApp.Data.Repositories
 
         public async Task<List<T>> GetAll<T>()
         {
-            return await _hotelAppDbContext
-                .Reservations
-                .Include(x => x.Room)
-                .Include(x => x.Guest)
-                .ProjectTo<T>()
-                .ToListAsync();
+            return await GetQuery().ProjectTo<T>().ToListAsync();
         }
 
         public async Task<IEnumerable<Reservation>> GetAll()
         {
-            return await _hotelAppDbContext
-                .Reservations
-                .Include(x => x.Room)
-                .Include(x => x.Guest)
-                .ToListAsync();
+            return await GetQuery().ToListAsync();
         }
 
         public IIncludableQueryable<Reservation, Guest> GetQuery()
