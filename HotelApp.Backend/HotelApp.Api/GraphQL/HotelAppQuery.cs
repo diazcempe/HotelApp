@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Types;
@@ -8,6 +9,7 @@ using HotelApp.Api.GraphQL.Types;
 using HotelApp.Core.Data;
 using HotelApp.Core.Enums;
 using HotelApp.Core.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace HotelApp.Api.GraphQL
 {
@@ -51,6 +53,10 @@ namespace HotelApp.Api.GraphQL
                 resolve: context =>
                 {
                     var query = reservationRepository.GetQuery();
+
+                    // Get User Identity
+                    var user = (ClaimsPrincipal) context.UserContext;
+                    var isUserAuthenticated = ((ClaimsIdentity) user.Identity).IsAuthenticated;
 
                     var reservationId = context.GetArgument<int?>("id");
                     if (reservationId.HasValue)

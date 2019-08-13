@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GraphQL;
+using GraphQL.Server;
+using GraphQL.Server.Ui.Playground;
 using HotelApp.Api.AutoMapper;
 using HotelApp.Api.Constants;
+using HotelApp.Api.GraphQL;
 using HotelApp.Core.Data;
 using HotelApp.Data.Contexts;
 using HotelApp.Data.Repositories;
@@ -43,13 +47,9 @@ namespace HotelApp.Api
         private void InitializeContainer()
         {
             // Register DbContext
-            _container.Register<DbContext>(() => {
-                var dbOptionBuilder = new DbContextOptionsBuilder<HotelAppDbContext>()
-                    .UseSqlServer(Configuration.GetConnectionString(AppConstants.SqlServerConnectionStringName));
-
-                var dbOptions = dbOptionBuilder.Options;
-                return new HotelAppDbContext(dbOptions);
-            }, Lifestyle.Scoped);
+            var dbOptionBuilder = new DbContextOptionsBuilder<HotelAppDbContext>()
+                .UseSqlServer(Configuration.GetConnectionString(AppConstants.SqlServerConnectionStringName));
+            _container.Register(() => new HotelAppDbContext(dbOptionBuilder.Options), Lifestyle.Scoped);
 
             _container.Register(typeof(IReservationRepository), typeof(ReservationRepository), Lifestyle.Scoped);
 
@@ -84,6 +84,19 @@ namespace HotelApp.Api
                     .AddTagHelperActivation();
             });
             #endregion
+
+            #region GraphQL
+            services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
+            services.AddScoped<HotelAppSchema>();
+
+            services.AddGraphQL(s =>
+                {
+                    s.ExposeExceptions = true; //set true only in development mode. make it switchable.
+                })
+                .AddGraphTypes(ServiceLifetime.Scoped)
+                .AddUserContextBuilder(httpContext => httpContext.User)
+                .AddDataLoader();
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -116,6 +129,11 @@ namespace HotelApp.Api
 
             #region SimpleInjector
             _container.Verify();
+            #endregion
+
+            #region GraphQL
+            app.UseGraphQL<HotelAppSchema>();
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions()); // to explorer API navigate https://*DOMAIN*/ui/playground
             #endregion
 
             app.UseMvc();
