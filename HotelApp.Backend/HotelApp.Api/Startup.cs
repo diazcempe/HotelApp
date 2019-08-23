@@ -42,14 +42,15 @@ namespace HotelApp.Api
         private void InitializeContainer()
         {
             // Register DbContext
-            var dbOptionBuilder = new DbContextOptionsBuilder<HotelAppDbContext>()
-                .UseSqlServer(Configuration.GetConnectionString(AppConstants.SqlServerConnectionStringName));
-            _container.Register(() => new HotelAppDbContext(dbOptionBuilder.Options), Lifestyle.Scoped);
+            // TODO to figure out how to properly register these
+            //var dbOptionBuilder = new DbContextOptionsBuilder<HotelAppDbContext>()
+            //    .UseSqlServer(Configuration.GetConnectionString(AppConstants.SqlServerConnectionStringName));
+            //_container.Register(() => new HotelAppDbContext(dbOptionBuilder.Options), Lifestyle.Scoped);
 
-            _container.Register(typeof(IReservationRepository), typeof(ReservationRepository), Lifestyle.Scoped);
+            //_container.Register(typeof(IReservationRepository), typeof(ReservationRepository), Lifestyle.Scoped);
 
             #region AutoMapper
-            ConfigureAutoMapper();
+            //ConfigureAutoMapper();
             #endregion
         }
         #endregion
@@ -85,6 +86,12 @@ namespace HotelApp.Api
                     .AddPageModelActivation()
                     .AddTagHelperActivation();
             });
+            #endregion
+
+            #region NETCORE Dependency Injection
+            // TODO to implement this in SimpleInjector
+            services.AddDbContext<HotelAppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString(AppConstants.SqlServerConnectionStringName)));
+            services.AddScoped(typeof(IReservationRepository), typeof(ReservationRepository));
             #endregion
 
             #region GraphQL
