@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using HotelApp.Core.DTOs;
 using HotelApp.Core.Models;
 
-namespace HotelApp.Api.AutoMapper
+namespace HotelApp.Api.MapperConfig
 {
     public class MappingProfile : Profile
     {

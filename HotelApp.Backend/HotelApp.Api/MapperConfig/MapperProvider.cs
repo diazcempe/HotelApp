@@ -2,7 +2,7 @@
 using AutoMapper.Configuration;
 using SimpleInjector;
 
-namespace HotelApp.Api.AutoMapper
+namespace HotelApp.Api.MapperConfig
 {
     public class MapperProvider
     {

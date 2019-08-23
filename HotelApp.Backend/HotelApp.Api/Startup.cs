@@ -1,28 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
-using HotelApp.Api.AutoMapper;
 using HotelApp.Api.Constants;
 using HotelApp.Api.GraphQL;
+using HotelApp.Api.MapperConfig;
 using HotelApp.Core.Data;
+using HotelApp.Core.DTOs;
+using HotelApp.Core.Models;
 using HotelApp.Data.Contexts;
 using HotelApp.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using SimpleInjector;
-using SimpleInjector.Lifestyles;
-using SimpleInjector.Integration.AspNetCore.Mvc;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace HotelApp.Api
 {
@@ -62,7 +57,14 @@ namespace HotelApp.Api
         #region AutoMapper
         private void ConfigureAutoMapper()
         {
-            _container.RegisterSingleton(() => _container.GetInstance<MapperProvider>().GetMapper());
+            //_container.RegisterSingleton(() => _container.GetInstance<MapperProvider>().GetMapper());
+            _container.RegisterSingleton(() => GetMapper(_container));
+        }
+
+        private static IMapper GetMapper(Container container)
+        {
+            var mp = container.GetInstance<MapperProvider>();
+            return mp.GetMapper();
         }
         #endregion
 
@@ -137,6 +139,18 @@ namespace HotelApp.Api
             #endregion
 
             app.UseMvc();
+
+            InitializeMapper();
+        }
+
+        private static void InitializeMapper()
+        {
+            Mapper.Initialize(x =>
+            {
+                x.CreateMap<Guest, GuestDto>();
+                x.CreateMap<Room, RoomDto>();
+                x.CreateMap<Reservation, ReservationDto>();
+            });
         }
     }
 }
