@@ -77,6 +77,7 @@ namespace HotelApp.Api
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // Enable Cross-Origin Resource Sharing (CORS)
+            // Reference: https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-2.2
             services.AddCors(options =>
             {
                 options.AddPolicy(AllowedSpecificOrigins,
@@ -126,6 +127,7 @@ namespace HotelApp.Api
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             // Enable Cross-Origin Resource Sharing (CORS)
+            // Reference: https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-2.2
             app.UseCors(AllowedSpecificOrigins);
 
             #region SimpleInjector
