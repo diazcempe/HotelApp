@@ -31,6 +31,8 @@ namespace HotelApp.Api
     {
         private Container _container = new Container();
 
+        readonly string AllowedSpecificOrigins = "AllowedSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -74,6 +76,18 @@ namespace HotelApp.Api
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            // Enable Cross-Origin Resource Sharing (CORS)
+            services.AddCors(options =>
+            {
+                options.AddPolicy(AllowedSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000") // CRA Apollo Client       
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
             #region SimpleInjector
             services.AddSimpleInjector(_container, options =>
             {
@@ -111,6 +125,9 @@ namespace HotelApp.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            // Enable Cross-Origin Resource Sharing (CORS)
+            app.UseCors(AllowedSpecificOrigins);
+
             #region SimpleInjector
             // UseSimpleInjector() enables framework services to be injected into
             // application components, resolved by Simple Injector.
